@@ -180,7 +180,7 @@
         // Execute the action based on backend response
         function executeAction(actionData) {
             if (actionData.action === "scroll") {
-                const direction = actionData.direction === "down" ? 1000 : -1000;
+                const direction = actionData.direction === "down" ? 750 : -750;
                 window.scrollBy({
                   top: direction,
                   behavior: 'smooth' // Enables smooth scrolling
