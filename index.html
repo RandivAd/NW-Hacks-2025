@@ -10,7 +10,7 @@
     body {
       font-family: 'Open Sans', sans-serif;
       margin: 0;
-      overflow-y: auto;
+      overflow: hidden;
     }
 
     .section {
@@ -77,18 +77,14 @@
     <div class="section about" id="about">
       <h2>About Navis</h2>
       <p>
-        Navis combines multimodal AI with voice commands to enhance web accessibility for users with disabilities.
-        Its intuitive interface offers a structured overview of webpages, detailed element descriptions, and easy navigation,
-        ensuring a more inclusive digital experience.
+        Navis is an AI-powered tool that processes voice commands to perform actions on websites, offering users a simple and intuitive way to navigate webpages without struggling to find specific pages or features. By leveraging multimodal AI and voice recognition, Navis enhances the browsing experience, allowing users to interact with web content effortlessly.
+        <br><br>
+        Currently, Navis is tailored to our own website, but it can be easily implemented on other websites by adding our JavaScript and Python files to the HTML file. We are actively working on generalizing Navis to make it compatible with a wider range of websites, ensuring its functionality can benefit more users.
+        <br><br>
+        Our long-term vision is to expand Navis to include features specifically designed for individuals with disabilities, such as advanced voice commands, screen reader compatibility, and support for users with visual or motor impairments. By focusing on inclusivity and accessibility, Navis aims to create a more equitable digital experience for everyone.
       </p>
+      
     </div>
-
-    <!-- Demo Section (Placeholder) -->
-    <div class="section demo">
-      <h2>Demo</h2>
-      <p>Experience how Navis empowers users by providing intuitive navigation and detailed content descriptions.</p>
-    </div>
-  </div>
 
   <script>
     let currentSection = 0;
@@ -207,5 +203,6 @@
     });
 
   </script>
+  
 </body>
 </html>
