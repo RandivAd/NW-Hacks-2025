@@ -5,3 +5,5 @@ spacy
 openai
 transformers
 python-dotenv
+tensorflow
+torch
