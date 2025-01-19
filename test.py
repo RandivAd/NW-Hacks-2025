@@ -4,6 +4,10 @@ import spacy
 import openai  # OpenAI GPT API
 from transformers import pipeline  # For multimodal AI like CLIP or image summarization
 import os
+from dotenv import load_dotenv
+
+# Load the environment variables from the .env file
+load_dotenv()
 
 # Initialize Flask app, spaCy NLP, and AI models
 app = Flask(__name__)
@@ -21,6 +25,10 @@ def process_command():
     """Process voice/text commands and return actions or insights."""
     data = request.json
     command = data.get('command', '').lower()
+    print(f"Received command: {command}")  # Debug print
+
+    if not command:
+        return jsonify({"error": "No command provided"}), 400
 
     # Voice command actions
     if "scroll down" in command:
@@ -28,26 +36,54 @@ def process_command():
     elif "scroll up" in command:
         return jsonify({"action": "scroll", "direction": "up"})
     elif "click" in command:
-        # Extract specific intents like clicking a link or button
+        # NLP processing for button clicks
         doc = nlp(command)
-        if "link" in command:
-            return jsonify({"action": "click", "target": "link"})
-        elif "button" in command:
-            return jsonify({"action": "click", "target": "button"})
+        print("Parsed tokens:")  # Debugging parsed tokens
+        for token in doc:
+            print(f"{token.text} -> {token.pos_}, {token.dep_}, like_num: {token.like_num}")
 
-    # AI-powered commands
-    elif "summarize" in command:
-        text = data.get('text', '')
-        summary = summarize_text(text)
-        return jsonify({"action": "summarize", "summary": summary})
-    elif "describe image" in command:
-        image_url = data.get('image_url', '')
-        description = analyze_image(image_url)
-        return jsonify({"action": "describe", "description": description})
+        button_number = None
 
+        # Extract the button number or ordinal
+        for token in doc:
+            if token.text == "button":
+                prev_token = doc[token.i - 1] if token.i > 0 else None
+                next_token = doc[token.i + 1] if token.i + 1 < len(doc) else None
+
+                # Check the previous or next token for a number or ordinal
+                if next_token and (next_token.like_num or next_token.text in {"first", "second", "third", "fourth", "fifth"}):
+                    ordinal_map = {
+                        "first": "1",
+                        "second": "2",
+                        "third": "3",
+                        "fourth": "4",
+                        "fifth": "5"
+                    }
+                    button_number = ordinal_map.get(next_token.text, next_token.text)  # Use mapped value or direct number
+                elif prev_token and (prev_token.like_num or prev_token.text in {"first", "second", "third", "fourth", "fifth"}):
+                    ordinal_map = {
+                        "first": "1",
+                        "second": "2",
+                        "third": "3",
+                        "fourth": "4",
+                        "fifth": "5"
+                    }
+                    button_number = ordinal_map.get(prev_token.text, prev_token.text)  # Use mapped value or direct number
+                break
+
+        if button_number:
+            print(f"Button number extracted: {button_number}")  # Debug print
+            return jsonify({"action": "click", "target": f"button{button_number}"})
+        else:
+            print("Button number not found or invalid.")  # Debug print
+            return jsonify({"error": "Invalid button command"}), 400
+
+    print(f"Command not recognized: {command}")  # Debug print
     return jsonify({"error": "Command not recognized"}), 400
 
-    
+
+
+
 
 def summarize_text(text):
     """Generate a summary of the given text using OpenAI GPT."""
