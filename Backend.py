@@ -6,6 +6,7 @@ from transformers import pipeline  # For multimodal AI like CLIP or image summar
 import os
 from dotenv import load_dotenv
 
+
 # Load the environment variables from the .env file
 load_dotenv()
 
@@ -95,4 +96,5 @@ def process_command():
     return jsonify({"error": "Command not recognized"}), 400
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    from waitress import serve
+    serve(app, host="0.0.0.0", port=5000)
