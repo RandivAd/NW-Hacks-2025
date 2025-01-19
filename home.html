@@ -9,6 +9,11 @@
             text-align: center;
             padding-top: 50px;
         }
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
         button {
             margin: 10px;
             padding: 10px 20px;
@@ -17,11 +22,13 @@
     </style>
 </head>
 <body>
-    <button onclick="changeColor('red')">Red</button>
-    <button onclick="changeColor('blue')">Blue</button>
-    <button onclick="changeColor('green')">Green</button>
-    <button onclick="changeColor('yellow')">Yellow</button>
-    <button onclick="changeColor('purple')">Purple</button>
+    <div class="button-container">
+        <button onclick="changeColor('red')">Red</button>
+        <button onclick="changeColor('blue')">Blue</button>
+        <button onclick="changeColor('green')">Green</button>
+        <button onclick="changeColor('yellow')">Yellow</button>
+        <button onclick="changeColor('purple')">Purple</button>
+    </div>
 
     <script>
         function changeColor(color) {
