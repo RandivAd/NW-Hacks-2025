@@ -110,8 +110,8 @@
   <header class="taskbar">
     <nav>
       <a href="home.html">Home</a>
-      <a href="#">Download</a>
-      <a href="#">About</a>
+      <a href="https://github.com/RandivAd/NW-Hacks-2025.git">Download</a>
+      <a href="home.html#about">About</a>
       <a href="demo.html">Demo</a>
     </nav>
   </header>
@@ -180,7 +180,7 @@
         // Execute the action based on backend response
         function executeAction(actionData) {
             if (actionData.action === "scroll") {
-                const direction = actionData.direction === "down" ? 500 : -500;
+                const direction = actionData.direction === "down" ? 1000 : -1000;
                 window.scrollBy({
                   top: direction,
                   behavior: 'smooth' // Enables smooth scrolling
@@ -189,13 +189,13 @@
                 // Handle navigation actions
                 const target = actionData.target;
                 if (target === "home") {
-                    goToSection(0); // Navigate to the home section
+                  window.location.href = "home.html"; // Navigate to the home page
                 } else if (target === "download") {
                     goToSection(1); // Navigate to the download section
                 } else if (target === "about") {
                     goToSection(2); // Navigate to the about section
                 } else if (target === "demo") {
-                    goToSection(3); // Navigate to the demo section
+                  window.location.href = "demo.html"; // Navigate to the demo page
                 } else {
                     console.error(`Unknown navigation target: ${target}`);
                 }

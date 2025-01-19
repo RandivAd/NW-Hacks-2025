@@ -66,7 +66,7 @@
     <div class="section hero">
       <nav class="absolute top-5 w-full flex justify-center space-x-6 text-lg">
         <a href="#" onclick="goToSection(0)" class="text-white hover:underline">Home</a>
-        <a href="#" onclick="goToSection(1)" class="text-white hover:underline">Download</a>
+        <a href="https://github.com/RandivAd/NW-Hacks-2025.git" class="text-white hover:underline" target="_blank">Download</a>
         <a href="#" onclick="goToSection(1)" class="text-white hover:underline">About</a>
         <a href="demo.html" onclick="goToSection(2)" class="text-white hover:underline">Demo</a>
       </nav>
@@ -74,7 +74,7 @@
     </div>
 
     <!-- About Section -->
-    <div class="section about">
+    <div class="section about" id="about">
       <h2>About Navis</h2>
       <p>
         Navis combines multimodal AI with voice commands to enhance web accessibility for users with disabilities.
@@ -152,7 +152,7 @@
         // Execute the action based on backend response
         function executeAction(actionData) {
             if (actionData.action === "scroll") {
-                const direction = actionData.direction === "down" ? 500 : -500;
+                const direction = actionData.direction === "down" ? 1000 : -1000;
                 window.scrollBy({
                   top: direction,
                   behavior: 'smooth' // Enables smooth scrolling
@@ -160,13 +160,13 @@
             } else if (actionData.action === "navigate") {
               const target = actionData.target;
               if (target === "home") {
-                  goToSection(0); // Navigate to the home section
+                window.location.href = "home.html"; // Navigate to the home page
               } else if (target === "download") {
                   goToSection(1); // Navigate to the download section
               } else if (target === "about") {
                   goToSection(2); // Navigate to the about section
               } else if (target === "demo") {
-                  goToSection(3); // Navigate to the demo section
+                window.location.href = "demo.html"; // Navigate to the demo page
               } else {
                   console.error(`Unknown navigation target: ${target}`);
               }
@@ -195,6 +195,16 @@
             }
         }
     // front end
+    
+    document.addEventListener("DOMContentLoaded", () => {
+    const hash = window.location.hash; // Get the hash fragment
+    if (hash) {
+        const targetSection = document.querySelector(hash);
+        if (targetSection) {
+            targetSection.scrollIntoView({ behavior: "smooth" }); // Scroll smoothly to the target section
+        }
+    }
+    });
 
   </script>
 </body>
