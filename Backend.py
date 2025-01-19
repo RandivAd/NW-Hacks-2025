@@ -1,9 +1,11 @@
-from flask import Flask, request, jsonify
+from flask import Flask,  request, jsonify
+from flask_cors import CORS
 import spacy
 
 # Initialize Flask app and spaCy NLP
 app = Flask(__name__)
 nlp = spacy.load("en_core_web_sm")
+CORS(app)
 
 @app.route('/process_command', methods=['POST'])
 def process_command():
