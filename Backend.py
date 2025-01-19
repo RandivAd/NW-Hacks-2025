@@ -24,8 +24,11 @@ def process_command():
         if "link" in command:
             return jsonify({"action": "click", "target": "link"})
         elif "button" in command:
-            return jsonify({"action": "click", "target": "button"})
-    return jsonify({"error": "Command not recognized"}), 400
+            for token in doc:
+                if token.like_num:  # Checks if the token is a number
+                    button_number = int(token.text)
+                    return jsonify({"action": "click", "target": f"button{button_number}"})
+            return jsonify({"error": "Button number not found"}), 400
 
 if __name__ == "__main__":
     app.run(debug=True)

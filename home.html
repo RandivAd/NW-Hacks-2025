@@ -69,11 +69,13 @@
             if (actionData.action === "scroll") {
                 const direction = actionData.direction === "down" ? 500 : -500;
                 window.scrollBy(0, direction);
-            } else if (actionData.action === "click") {
-                if (actionData.target === "link") {
-                    document.querySelector("a").click();
-                } else if (actionData.target === "button") {
-                    document.querySelector("button").click();
+            } else if (actionData.action === "click" && actionData.target.startsWith("button")) {
+                const buttonNumber = actionData.target.replace("button", ""); // Extract the button number
+                const button = document.querySelectorAll("button")[buttonNumber - 1]; // Adjust for zero-based index
+                if (button) {
+                    button.click();
+                } else {
+                    console.error(`Button ${buttonNumber} not found.`);
                 }
             } else {
                 console.error("Action not supported.");
