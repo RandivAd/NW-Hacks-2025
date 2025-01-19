@@ -1,41 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Color Changer</title>
-    <style>
-        body {
-            text-align: center;
-            padding-top: 50px;
-        }
-        .button-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        button {
-            margin: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Navis - Accessibility Awareness</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      margin: 0;
+      overflow-y: auto;
+    }
+
+    .section {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      transition: transform 1s ease;
+    }
+
+    .hero {
+      background: linear-gradient(to right, #667eea, #764ba2);
+      color: white;
+    }
+
+    .hero h1 {
+      font-size: 4.5rem; /* Adjusted size for better balance */
+      font-weight: 400; /* Lighter font weight for a professional look */
+      letter-spacing: 0.02em; /* Subtle letter spacing for elegance */
+      text-transform: none; /* Keep original casing */
+    }
+
+    .about {
+      background: linear-gradient(to right, #a8c0ff, #3f2b96);
+      color: white;
+    }
+
+    .about h2 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .about p {
+      font-size: 1.25rem;
+      line-height: 1.75rem;
+      max-width: 800px;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      transition: transform 1s ease;
+    }
+  </style>
 </head>
 <body>
-    <div class="button-container">
-        <button onclick="changeColor('red')">Red</button>
-        <button onclick="changeColor('blue')">Blue</button>
-        <button onclick="changeColor('green')">Green</button>
-        <button onclick="changeColor('yellow')">Yellow</button>
-        <button onclick="changeColor('purple')">Purple</button>
+  <div class="container" id="container">
+    <!-- Hero Section -->
+    <div class="section hero">
+      <nav class="absolute top-5 w-full flex justify-center space-x-6 text-lg">
+        <a href="#" onclick="goToSection(0)" class="text-white hover:underline">Home</a>
+        <a href="#" onclick="goToSection(1)" class="text-white hover:underline">Download</a>
+        <a href="#" onclick="goToSection(1)" class="text-white hover:underline">About</a>
+        <a href="demo.html" onclick="goToSection(2)" class="text-white hover:underline">Demo</a>
+      </nav>
+      <h1>Navis</h1>
     </div>
 
-    <script>
-        function changeColor(color) {
+    <!-- About Section -->
+    <div class="section about">
+      <h2>About Navis</h2>
+      <p>
+        Navis combines multimodal AI with voice commands to enhance web accessibility for users with disabilities.
+        Its intuitive interface offers a structured overview of webpages, detailed element descriptions, and easy navigation,
+        ensuring a more inclusive digital experience.
+      </p>
+    </div>
+
+    <!-- Demo Section (Placeholder) -->
+    <div class="section demo">
+      <h2>Demo</h2>
+      <p>Experience how Navis empowers users by providing intuitive navigation and detailed content descriptions.</p>
+    </div>
+  </div>
+
+  <script>
+    let currentSection = 0;
+    const sections = document.querySelectorAll('.section');
+    const container = document.getElementById('container');
+
+    // Add event listener for scrolling
+    window.addEventListener('wheel', (event) => {
+      if (event.deltaY > 0) {
+        goToSection(currentSection + 1);
+      } else {
+        goToSection(currentSection - 1);
+      }
+    });
+
+    function goToSection(index) {
+      if (index < 0 || index >= sections.length) return;
+      currentSection = index;
+      container.style.transform = `translateY(-${currentSection * 100}vh)`;
+    }
+  
+    //front end
+    function changeColor(color) {
             document.body.style.backgroundColor = color;
         }
-
-        // front end
         // Check for speech recognition support
         if ('speechRecognition' in window || 'webkitSpeechRecognition' in window) {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -75,7 +153,23 @@
         function executeAction(actionData) {
             if (actionData.action === "scroll") {
                 const direction = actionData.direction === "down" ? 500 : -500;
-                window.scrollBy(0, direction);
+                window.scrollBy({
+                  top: direction,
+                  behavior: 'smooth' // Enables smooth scrolling
+                });
+            } else if (actionData.action === "navigate") {
+              const target = actionData.target;
+              if (target === "home") {
+                  goToSection(0); // Navigate to the home section
+              } else if (target === "download") {
+                  goToSection(1); // Navigate to the download section
+              } else if (target === "about") {
+                  goToSection(2); // Navigate to the about section
+              } else if (target === "demo") {
+                  goToSection(3); // Navigate to the demo section
+              } else {
+                  console.error(`Unknown navigation target: ${target}`);
+              }
             } else if (actionData.action === "click") {
                 if (actionData.target.startsWith("button")) {
                     const buttonNumber = actionData.target.replace("button", ""); // Extract the button number
@@ -100,9 +194,8 @@
                 console.error("Action not supported.");
             }
         }
+    // front end
 
-        // front end
-
-    </script>
+  </script>
 </body>
 </html>

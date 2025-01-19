@@ -109,7 +109,7 @@
 <body>
   <header class="taskbar">
     <nav>
-      <a href="index.html">Home</a>
+      <a href="home.html">Home</a>
       <a href="#">Download</a>
       <a href="#">About</a>
       <a href="demo.html">Demo</a>
@@ -185,6 +185,20 @@
                   top: direction,
                   behavior: 'smooth' // Enables smooth scrolling
                 });
+            } else if (actionData.action === "navigate") {
+                // Handle navigation actions
+                const target = actionData.target;
+                if (target === "home") {
+                    goToSection(0); // Navigate to the home section
+                } else if (target === "download") {
+                    goToSection(1); // Navigate to the download section
+                } else if (target === "about") {
+                    goToSection(2); // Navigate to the about section
+                } else if (target === "demo") {
+                    goToSection(3); // Navigate to the demo section
+                } else {
+                    console.error(`Unknown navigation target: ${target}`);
+                }
             } else if (actionData.action === "click") {
                 if (actionData.target.startsWith("button")) {
                     const buttonNumber = actionData.target.replace("button", ""); // Extract the button number

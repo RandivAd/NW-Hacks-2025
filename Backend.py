@@ -31,10 +31,23 @@ def process_command():
         return jsonify({"error": "No command provided"}), 400
 
     # Voice command actions
+
+    #page selection commands
+    if "home page" in command or "go to home" in command or "homepage" in command:
+        return jsonify({"action": "navigate", "target": "home"})
+    elif "demo page" in command or "go to demo" in command:
+        return jsonify({"action": "navigate", "target": "demo"})
+    elif "about page" in command or "go to about" in command:
+        return jsonify({"action": "navigate", "target": "about"})
+    elif "download page" in command or "go to download" in command:
+        return jsonify({"action": "navigate", "target": "download"})
+
+    # scroll commands
     if "scroll down" in command:
         return jsonify({"action": "scroll", "direction": "down"})
     elif "scroll up" in command:
         return jsonify({"action": "scroll", "direction": "up"})
+    # click commands
     elif "click" in command:
         # NLP processing for button clicks
         doc = nlp(command)
