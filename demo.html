@@ -137,6 +137,79 @@
       document.querySelector('.taskbar').style.background = gradient;
       document.querySelector('footer').style.background = gradient;
     }
+
+    // front end
+    function changeColor(color) {
+            document.body.style.backgroundColor = color;
+        }
+        // Check for speech recognition support
+        if ('speechRecognition' in window || 'webkitSpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+
+            recognition.continuous = true;
+            recognition.interimResults = false;
+
+            // Start listening
+            recognition.onstart = () => console.log("Voice recognition started...");
+            recognition.onresult = async (event) => {
+                const command = event.results[event.results.length - 1][0].transcript.trim().toLowerCase();
+                console.log(`Command recognized: ${command}`);
+
+                // Send command to backend
+                const response = await fetch("http://127.0.0.1:5000/process_command", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ command: command })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    executeAction(data);
+                } else {
+                    console.error("Command not recognized by backend.");
+                }
+            };
+
+            recognition.onerror = (event) => console.error(`Error: ${event.error}`);
+            recognition.start();
+        } else {
+            console.error("Speech recognition not supported in this browser.");
+        }
+
+        // Execute the action based on backend response
+        function executeAction(actionData) {
+            if (actionData.action === "scroll") {
+                const direction = actionData.direction === "down" ? 500 : -500;
+                window.scrollBy({
+                  top: direction,
+                  behavior: 'smooth' // Enables smooth scrolling
+                });
+            } else if (actionData.action === "click") {
+                if (actionData.target.startsWith("button")) {
+                    const buttonNumber = actionData.target.replace("button", ""); // Extract the button number
+                    const button = document.querySelectorAll("button")[buttonNumber - 1]; // Adjust for zero-based index
+                    if (button) {
+                        button.click();
+                    } else {
+                        console.error(`Button ${buttonNumber} not found.`);
+                    }
+                } else if (actionData.target === "link") {
+                    // Find the first link and click it
+                    const link = document.querySelector("a"); // Adjust as necessary
+                    if (link) {
+                        link.click();
+                    } else {
+                        console.error("No link found to click.");
+                    }
+                } else {
+                    console.error("Target not recognized.");
+                }
+            } else {
+                console.error("Action not supported.");
+            }
+        }
+    // front end
   </script>
 </body>
 </html>
